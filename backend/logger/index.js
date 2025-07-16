@@ -1,0 +1,19 @@
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: process.env.NODE_ENV === 'production' ? 'warn' : 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.colorize(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `[${timestamp}] ${level}: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console({
+      silent: process.env.NODE_ENV === 'production' // ❗ disable winston in prod
+    }),
+  ],
+});
+
+export default logger;
