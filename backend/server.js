@@ -28,6 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
 
+
 // Health Check
 app.get('/', (req, res) => res.send('Job Management System Running'));
 

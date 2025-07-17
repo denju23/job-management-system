@@ -22,10 +22,15 @@ export const createJob = asyncHandler(async (req, res) => {
 
 // Get all jobs
 export const getJobs = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, status, title, search, sort = '-createdAt' } = req.query;
+  const { own, page = 1, limit = 10, status, title, search, sort = '-createdAt' } = req.query;
 
-  const filter = req.user.role === 'admin' ? {} : { userId: req.user.id };
-
+  // const filter = req.user.role === 'admin' ? {} : { userId: req.user.id };
+  
+  const filter = (req.user.role === 'admin' && own === 'true')
+    ? { userId: req.user.id }
+    : req.user.role === 'admin'
+      ? {}
+      : { userId: req.user.id };
   if (status) {
     filter.status = status;
   }
@@ -106,4 +111,55 @@ export const deleteJob = asyncHandler(async (req, res) => {
   logger.info(`Job deleted by ${req.user.email} - Job ID: ${job._id}`);
 
   res.status(HTTP_STATUS.OK).json({ message: 'Job deleted successfully' });
+});
+
+
+
+export const getAllJobsForAdmin = asyncHandler(async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    status,
+    title,
+    search,
+    sort = '-createdAt'
+  } = req.query;
+
+  const filter = {};
+
+  if (status) {
+    filter.status = status;
+  }
+
+  if (title) {
+    filter.title = new RegExp(title, 'i'); // case-insensitive
+  }
+
+  if (search) {
+    filter.$or = [
+      { title: new RegExp(search, 'i') },
+      { description: new RegExp(search, 'i') }
+    ];
+  }
+
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const jobs = await Job.find(filter)
+    .sort(sort)
+    .skip(skip)
+    .limit(Number(limit))
+    .populate('userId', 'name email'); // populate user details
+
+  const total = await Job.countDocuments(filter);
+
+  logger.info(`Admin ${req.user.email} fetched all jobs | page ${page}`);
+
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    total,
+    page: Number(page),
+    limit: Number(limit),
+    totalPages: Math.ceil(total / limit),
+    data: jobs,
+  });
 });

@@ -38,3 +38,53 @@ Make sure you have the following installed:
 
 ## 📁 Folder Structure
 
+
+
+# 💼 Job Management System - Frontend
+
+This is the **frontend** of the Job Management System, developed using **React v19** with **Vite** for fast development and build. It includes **responsive UI** using Bootstrap, dynamic tables with filtering and sorting using `@tanstack/react-table`, form handling with `react-hook-form`, and client-side routing using React Router v7.
+
+The frontend interacts with the backend API to support user and admin functionalities like registration, login, dashboard views, job creation/editing, and role-based job access.
+
+---
+
+## ✅ Requirements
+
+Ensure you have the following installed:
+
+- [Node.js v20.x](https://nodejs.org/)
+- [npm v9+](https://www.npmjs.com/)
+- Backend server running (API)
+
+---
+
+## ⚙️ Tech Stack
+
+- **React v19**
+- **Vite v7**
+- **React Router v7**
+- **Bootstrap v5**
+- **React-Bootstrap**
+- **React Hook Form**
+- **React Toastify**
+- **@tanstack/react-table v8**
+- **Axios** (for API calls)
+
+---
+
+## 🚀 Features
+
+- User & Admin Login/Register (JWT-based)
+- Dashboard layout with role-based views
+- Create, edit, and delete jobs (modal based)
+- Show job listings in a styled, paginated table
+- Filtering, searching, and status tags
+- Toast notifications for user feedback
+- Responsive UI for all screen sizes
+- Context API for global auth & job state
+- Form validation and error messages
+
+---
+
+## 📁 Folder Structure
+

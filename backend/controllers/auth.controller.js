@@ -72,3 +72,8 @@ export const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().select('-password');
+  res.status(HTTP_STATUS.OK).json(users);
+});

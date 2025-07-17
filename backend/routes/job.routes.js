@@ -4,6 +4,7 @@ import {
   getJobs,
   updateJob,
   deleteJob,
+  getAllJobsForAdmin,
 } from '../controllers/job.controller.js';
 
 import protect from '../middlewares/auth.middleware.js';
@@ -33,6 +34,7 @@ const jobQueryValidationRules = [
 // Routes
 router.post('/', jobValidationRules, validateRequest, createJob);
 router.get('/', jobQueryValidationRules, validateRequest, getJobs);
+router.get('/admin', jobQueryValidationRules, validateRequest, getAllJobsForAdmin);
 router.put('/:id', jobValidationRules, validateRequest, updateJob);
 router.delete('/:id', deleteJob);
 

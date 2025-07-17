@@ -2,6 +2,8 @@ import express from 'express';
 import { registerUser, loginUser } from '../controllers/auth.controller.js';
 import validateRequest from '../middlewares/validateRequest.js';
 import { body } from 'express-validator';
+import { getAllUsers } from '../controllers/auth.controller.js';
+import protect from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -31,5 +33,7 @@ const loginValidationRules = [
 // Routes
 router.post('/register', registerValidationRules, validateRequest, registerUser);
 router.post('/login', loginValidationRules, validateRequest, loginUser);
+router.get('/users', protect(['admin']), getAllUsers);
+
 
 export default router;
