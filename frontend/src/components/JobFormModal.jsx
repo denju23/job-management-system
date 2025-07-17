@@ -33,7 +33,7 @@ const JobFormModal = ({ show, onClose, onSubmit, initialData }) => {
   return (
     <Modal show={show} onHide={onClose} backdrop="static" keyboard={false}>
       <Form onSubmit={handleSubmit(submitHandler)}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton  className="border-0">
           <Modal.Title>{initialData ? 'Edit Job' : 'Create Job'}</Modal.Title>
         </Modal.Header>
 
@@ -73,7 +73,7 @@ const JobFormModal = ({ show, onClose, onSubmit, initialData }) => {
           </Form.Group>
         </Modal.Body>
 
-        <Modal.Footer>
+        <Modal.Footer  className="border-0">
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>

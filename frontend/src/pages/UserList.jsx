@@ -42,6 +42,11 @@ const UserList = () => {
       {
         header: 'Name',
         accessorKey: 'name',
+        cell: (info) => {
+          const fullText = info.getValue();
+          const shortText = fullText.length > 8 ? fullText.slice(0, 15) + '...' : fullText;
+          return <div title={fullText} className="ellipsis-cell">{shortText}</div>;
+        }
       },
       {
         header: 'Email',
@@ -59,7 +64,20 @@ const UserList = () => {
       {
         header: 'Registered At',
         accessorKey: 'createdAt',
-        cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        // cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        cell: (info) => {
+          const date = new Date(info.getValue());
+          const formatted = date.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          });
+
+          return `${formatted}`;
+        }
       },
     ],
     []

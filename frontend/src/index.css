@@ -13,3 +13,24 @@ body {
   font-family: sans-serif;
   background-color: #f5f5f5;
 }
+
+
+table th,
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+.table-ellipsis {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  margin: 0 auto;
+}

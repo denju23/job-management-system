@@ -9,6 +9,7 @@ import { useMemo, useEffect, useState } from 'react';
 import { useJobs } from '../../context/JobContext';
 import JobFormModal from '../../components/JobFormModal';
 import { useLocation } from 'react-router-dom';
+import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 
 const JobList = () => {
   const {
@@ -24,6 +25,11 @@ const JobList = () => {
     setSearch,
     statusFilter,
     setStatusFilter,
+    openDeleteModal,
+    showDeleteModal,
+    closeDeleteModal,
+    confirmDeleteJob,
+    jobToDelete,
   } = useJobs();
   const location = useLocation();
   const isAdminJobsRoute = location.pathname === '/admin/jobs';
@@ -60,10 +66,20 @@ const JobList = () => {
       {
         header: 'Title',
         accessorKey: 'title',
+        cell: (info) => {
+          const fullText = info.getValue();
+          const shortText = fullText.length > 8 ? fullText.slice(0, 15) + '...' : fullText;
+          return <div title={fullText} className="ellipsis-cell">{shortText}</div>;
+        }
       },
       {
         header: 'Description',
         accessorKey: 'description',
+        cell: (info) => {
+          const fullText = info.getValue();
+          const shortText = fullText.length > 15 ? fullText.slice(0, 15) + '...' : fullText;
+          return <div title={fullText} className="ellipsis-cell">{shortText}</div>;
+        }
       },
       {
         header: 'Status',
@@ -91,9 +107,10 @@ const JobList = () => {
             <button
               className="btn btn-sm btn-danger"
               onClick={() => {
-                if (window.confirm('Are you sure you want to delete this job?')) {
-                  deleteJob(row.original._id);
-                }
+                openDeleteModal(row.original._id)
+                // if (window.confirm('Are you sure you want to delete this job?')) {
+                //   deleteJob(row.original._id);
+                // }
               }}
             >
               Delete
@@ -235,6 +252,13 @@ const JobList = () => {
         onClose={closeModal}
         onSubmit={handleSubmit}
         initialData={selectedJob}
+      />
+      {/* Confirm Delete Modal */}
+      <ConfirmDeleteModal
+        show={showDeleteModal}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteJob}
+        jobTitle={jobToDelete?.title}
       />
     </>
   );

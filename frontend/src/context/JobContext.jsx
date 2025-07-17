@@ -23,6 +23,8 @@ export const JobProvider = ({ children }) => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { user } = useAuth();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [jobToDelete, setJobToDelete] = useState(null);
 
 
   const fetchAdminJobs = async () => {
@@ -91,6 +93,33 @@ export const JobProvider = ({ children }) => {
     }
   };
 
+
+
+  const openDeleteModal = (job) => {
+    setJobToDelete(job);
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setJobToDelete(null);
+    setShowDeleteModal(false);
+  };
+
+  const confirmDeleteJob = async () => {
+    if (jobToDelete) {
+      try {
+        await apiDelete(jobToDelete);
+        toast.success('Job deleted successfully!');
+        fetchJobs(); // Or fetchAdminJobs() if you're in admin context
+      } catch (err) {
+        toast.error('Failed to delete job');
+      } finally {
+        closeDeleteModal();
+      }
+    }
+  };
+
+
   const openModal = (job = null) => {
     setSelectedJob(job);
     setShowModal(true);
@@ -117,6 +146,11 @@ export const JobProvider = ({ children }) => {
         deleteJob,
         openModal,
         closeModal,
+        showDeleteModal,
+        openDeleteModal,
+        closeDeleteModal,
+        confirmDeleteJob,
+        jobToDelete,
       }}
     >
       {children}

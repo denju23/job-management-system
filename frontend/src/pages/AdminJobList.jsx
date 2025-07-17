@@ -8,6 +8,7 @@ import { useMemo, useEffect, useState } from 'react';
 import { useJobs } from '../context/JobContext';
 import JobFormModal from '../components/JobFormModal';
 import { useAuth } from '../context/AuthContext';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 const AdminJobList = () => {
   const {
@@ -24,9 +25,14 @@ const AdminJobList = () => {
     statusFilter,
     setStatusFilter,
     setSelectedJob,
+    openDeleteModal,
+    showDeleteModal,
+    closeDeleteModal,
+    confirmDeleteJob,
+    jobToDelete,
   } = useJobs();
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const [pageIndex, setPageIndex] = useState(0);
   const pageSize = 8;
@@ -65,10 +71,20 @@ const AdminJobList = () => {
       {
         header: 'Title',
         accessorKey: 'title',
+        cell: (info) => {
+          const fullText = info.getValue();
+          const shortText = fullText.length > 8 ? fullText.slice(0, 15) + '...' : fullText;
+          return <div title={fullText} className="ellipsis-cell">{shortText}</div>;
+        }
       },
       {
         header: 'Description',
         accessorKey: 'description',
+        cell: (info) => {
+          const fullText = info.getValue();
+          const shortText = fullText.length > 15 ? fullText.slice(0, 15) + '...' : fullText;
+          return <div title={fullText} className="ellipsis-cell">{shortText}</div>;
+        }
       },
       {
         header: 'Status',
@@ -111,9 +127,10 @@ const AdminJobList = () => {
             <button
               className="btn btn-sm btn-danger"
               onClick={() => {
-                if (window.confirm('Are you sure you want to delete this job?')) {
-                  deleteJob(row.original._id);
-                }
+                openDeleteModal(row.original._id)
+                // if (window.confirm('Are you sure you want to delete this job?')) {
+                //   deleteJob(row.original._id);
+                // }
               }}
             >
               Delete
@@ -148,11 +165,13 @@ const AdminJobList = () => {
   //   setSelectedJob(null)
   // };
 
-   const handleSubmit = async (formData) => {
+  const handleSubmit = async (formData) => {
     if (selectedJob) {
       await updateJob(selectedJob._id, formData);
+      fetchAdminJobs()
     } else {
       await createJob(formData);
+      fetchAdminJobs()
     }
     closeModal();
   };
@@ -263,6 +282,14 @@ const AdminJobList = () => {
         onClose={closeModal}
         onSubmit={handleSubmit}
         initialData={selectedJob}
+      />
+
+      {/* Confirm Delete Modal */}
+      <ConfirmDeleteModal
+        show={showDeleteModal}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteJob}
+        jobTitle={jobToDelete?.title}
       />
     </>
   );
