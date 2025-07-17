@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-3">
-      <Link className="navbar-brand" to="/">
+      <Link className="navbar-brand" to={user ? "/dashboard" : "/login"}>
         Job Manager
       </Link>
 

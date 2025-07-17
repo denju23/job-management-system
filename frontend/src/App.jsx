@@ -15,11 +15,13 @@ import AdminJobList from './pages/AdminJobList';
 function App() {
   return (
     <>
-       {/* <Router> */}
+      {/* <Router> */}
       <Navbar />
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<DashboardLayout />} />
+        {/* <Route path="/" element={<DashboardLayout />} />
+         */}
+        <Route path="/" element={<Login/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -50,7 +52,7 @@ function App() {
           path="/admin/jobs"
           element={
             <AdminJobList />
-          
+
           }
         />
 
@@ -87,7 +89,7 @@ function App() {
         {/* 404 fallback */}
         <Route path="*" element={<div className="text-center">404 | Page Not Found</div>} />
       </Routes>
-    {/* // </Router> */}
+      {/* // </Router> */}
     </>
 
   );
